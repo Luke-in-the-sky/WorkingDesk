@@ -7,8 +7,7 @@ app = Flask(__name__)
 
 
 app.vars = {'ticker' : 'AAPL',
-            'open'   : False,
-            'close'  : True}
+            'features': []}
 
 @app.route("/index", methods=['GET', 'POST'])
 def hello():
@@ -16,14 +15,14 @@ def hello():
         return render_template('fallOn.html')
     else:
         app.vars['ticker'] = request.form['ticker']
-        app.vars['close']  = request.form['open']
-        app.vars['open']   = request.form['close']
+        app.vars['features'] = request.form.getlist('features')
+
         return redirect('/chart')
 
 @app.route("/chart")
 def chart():
     print(app.vars['ticker'])
-    script, div = plot_stock_data(app.vars['ticker'], app.vars['open'], app.vars['close'])
+    script, div = plot_stock_data(app.vars['ticker'], app.vars['features'])
     return render_template('graph.html', script=script, div=div)
 
     

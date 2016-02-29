@@ -7,7 +7,7 @@ from bokeh.embed import components
 # Day 8: Google Finance ancestor
 # ----------------
 
-def plot_stock_data(stock='FB', plot_open=False, plot_close=True):
+def plot_stock_data(stock='FB', features_to_plot=['Close']):
     '''
     For a given stock ticker:
       1. Request historical data from Quandle
@@ -32,10 +32,11 @@ def plot_stock_data(stock='FB', plot_open=False, plot_close=True):
                x_axis_label = "Date", 
                x_axis_type = "datetime")
     
-    if plot_open:
-        p.line(x=x, y=data['Open'], line_color='navy', legend='Open price')
-    if plot_close:
-        p.line(x=x, y=data['Close'], line_color='red', legend='Close price')
+    colors = {'Close' : 'navy',
+              'Open'  : 'red'}
+              
+    for feature in features_to_plot:
+        p.line(x=x, y=data[feature], line_color=colors[feature], legend=feature)
 
     p.legend.location = "top_left"
     
